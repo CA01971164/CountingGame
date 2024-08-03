@@ -12,9 +12,9 @@ class Mana {
 const mana1 = new Mana(0);
 
 function cont(numb: number) {
-  if (Number(mana1.count) < 10) {
+  if (mana1.count < 10) {
     mana1.count = mana1.count + 1;
-    if (Number(mana1.count) === 1) {
+    if (mana1.count === 1) {
       let p = document.createElement("p");
       p.classList.add("c1");
       p.innerHTML = `挑戦回数: ${mana1.count}`;
@@ -25,7 +25,7 @@ function cont(numb: number) {
         aa.innerHTML = `挑戦回数: ${mana1.count}`;
       }
     }
-  } else if (Number(mana1.count) === 10) {
+  } else if (mana1.count === 10) {
     let p = document.createElement("p");
     p.classList.add("tru");
     p.innerHTML = `正解は ${numb} でした。お疲れ様！`;
@@ -60,7 +60,7 @@ function cont(numb: number) {
 }
 
 function kazu(numb: number) {
-  if (Number(mana1.count) < 10) {
+  if (mana1.count < 10) {
     const text = document.querySelector(".text") as HTMLInputElement;
     let val: string | number = text?.value;
     val = Number(val);
