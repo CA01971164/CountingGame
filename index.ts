@@ -1,105 +1,132 @@
-const bun = document.querySelector(".bun");
-let numb = Math.floor(Math.random() * 100) + 1;
-console.log(numb);
-
-class Mana {
+class Game {
   public count: number;
-  constructor(count1: number) {
-    this.count = count1;
+  public targetNumber: number;
+
+  constructor() {
+    this.count = 0;
+    this.targetNumber = this.generateNumber();
+    console.log(this.targetNumber); // For debugging
   }
-}
 
-const mana1 = new Mana(0);
+  private generateNumber(): number {
+    return Math.floor(Math.random() * 100) + 1;
+  }
 
-function cont(numb: number) {
-  if (mana1.count < 10) {
-    mana1.count = mana1.count + 1;
-    if (mana1.count === 1) {
-      let p = document.createElement("p");
-      p.classList.add("c1");
-      p.innerHTML = `挑戦回数: ${mana1.count}`;
-      bun?.appendChild(p);
+  public incrementCount(): void {
+    this.count++;
+  }
+
+  public resetGame(): void {
+    this.count = 0;
+    this.targetNumber = this.generateNumber();
+  }
+
+  public evaluateGuess(val: number): string {
+    if (this.targetNumber === val) {
+      return "おめでとう！正解です！";
+    } else if (this.targetNumber - 1 <= val && val <= this.targetNumber + 1) {
+      return "!!惜しい!!ほぼ、正解！";
+    } else if (this.targetNumber - 5 <= val && val <= this.targetNumber + 5) {
+      return "かなり、近いよ!!";
+    } else if (val <= this.targetNumber - 50 || this.targetNumber + 50 <= val) {
+      return "とんでもなく離れてる!";
+    } else if (val < this.targetNumber) {
+      return "もっと大きい数だよ！";
+    } else if (this.targetNumber < val) {
+      return "もっと小さい数だよ！";
     } else {
-      let aa = document.querySelector(".c1");
-      if (aa !== null) {
-        aa.innerHTML = `挑戦回数: ${mana1.count}`;
-      }
+      return "1から100の間で入力してね";
     }
-  } else if (mana1.count === 10) {
-    let p = document.createElement("p");
-    p.classList.add("tru");
-    p.innerHTML = `正解は ${numb} でした。お疲れ様！`;
-    bun?.appendChild(p);
-    let button = document.createElement("button");
-    button.innerHTML = "リセット";
-    button.classList.add("reset");
-    let ans = document.querySelector(".ans");
-    ans?.appendChild(button);
-    mana1.count++;
-    ans?.addEventListener("click", () => {
-      mana1.count = 0;
-      let msg = document.querySelector(".msg");
-      if (msg !== null) {
-        msg.innerHTML = " ";
-      }
+  }
+}
 
-      let c1 = document.querySelector(".c1");
-      c1?.remove();
-      let ans = document.querySelector(".ans");
+class UI {
+  private game: Game;
+  private bun: HTMLElement | null;
+  private msg: HTMLElement | null;
+  private text: HTMLInputElement | null;
+  private button: HTMLElement | null;
+  private ans: HTMLElement | null;
 
-      if (ans && ans.firstChild) {
-        ans.removeChild(ans.firstChild);
-      }
+  constructor(game: Game) {
+    this.game = game;
+    this.bun = document.querySelector(".bun");
+    this.msg = document.querySelector(".msg");
+    this.text = document.querySelector(".text") as HTMLInputElement;
+    this.button = document.querySelector(".button");
+    this.ans = document.querySelector(".ans");
 
-      let tru = document.querySelector(".tru");
-      tru?.remove();
+    this.addEventListeners();
+  }
+
+  private addEventListeners(): void {
+    this.button?.addEventListener("click", () => this.handleButtonClick());
+  }
+
+  private handleButtonClick(): void {
+    this.game.incrementCount();
+    this.updateCountDisplay();
+    const val = Number(this.text?.value);
+
+    if (this.game.count <= 10) {
+      const resultMessage = this.game.evaluateGuess(val);
+      this.showResultMessage(resultMessage);
+    }
+
+    if (this.game.count === 10) {
+      this.showResetButton();
+    }
+  }
+
+  private updateCountDisplay(): void {
+    let countDisplay = document.querySelector(".c1");
+
+    if (countDisplay === null) {
+      countDisplay = document.createElement("p");
+      countDisplay.classList.add("c1");
+      this.bun?.appendChild(countDisplay);
+    }
+
+    countDisplay.innerHTML = `挑戦回数: ${this.game.count}`;
+  }
+
+  private showResultMessage(message: string): void {
+    if (this.msg !== null) {
+      this.msg.innerHTML = message;
+    }
+  }
+
+  private showResetButton(): void {
+    const resetButton = document.createElement("button");
+    resetButton.innerHTML = "リセット";
+    resetButton.classList.add("reset");
+    this.ans?.appendChild(resetButton);
+
+    resetButton.addEventListener("click", () => {
+      this.game.resetGame();
+      this.clearMessages();
+      this.removeElements();
+      this.updateCountDisplay();
     });
-  } else {
-    console.log("もう一度更新してね");
   }
-}
 
-function kazu(numb: number) {
-  if (mana1.count < 10) {
-    const text = document.querySelector(".text") as HTMLInputElement;
-    let val: string | number = text?.value;
-    val = Number(val);
-    numb = Number(numb);
-    let msg = document.querySelector(".msg");
-    if (1 <= val && val <= 100) {
-      if (numb === val) {
-        if (msg !== null) {
-          msg.innerHTML = " おめでとう！正解です！";
-        }
-      } else if (numb - 1 <= val && val <= numb + 1) {
-        if (msg !== null) {
-          msg.innerHTML = " !!惜しい!!ほぼ、正解！";
-        }
-      } else if (numb - 5 <= val && val <= numb + 5) {
-        if (msg !== null) {
-          msg.innerHTML = " かなり、近いよ!!";
-        }
-      } else if (val <= numb - 50 || numb + 50 <= val) {
-        if (msg !== null) {
-          msg.innerHTML = " とんでもなく離れてる!";
-        }
-      } else if (val < numb) {
-        if (msg !== null) {
-          msg.innerHTML = "もっと大きい数だよ！";
-        }
-      } else if (numb < val) {
-        if (msg !== null) {
-          msg.innerHTML = "もっと小さい数だよ！";
-        }
-      } else {
-        if (msg !== null) {
-          msg.innerHTML = "1から100の間で入力してね";
-        }
-      }
+  private clearMessages(): void {
+    if (this.msg !== null) {
+      this.msg.innerHTML = " ";
     }
   }
+
+  private removeElements(): void {
+    const countDisplay = document.querySelector(".c1");
+    countDisplay?.remove();
+
+    const resetButton = document.querySelector(".reset");
+    resetButton?.remove();
+
+    const trueMessage = document.querySelector(".tru");
+    trueMessage?.remove();
+  }
 }
 
-let button = document.querySelector(".button");
-button?.addEventListener("click", () => cont(numb));
-button?.addEventListener("click", () => kazu(numb));
+const game = new Game();
+const ui = new UI(game);
