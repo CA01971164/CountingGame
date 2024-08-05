@@ -79,7 +79,9 @@ class UI {
   }
 
   private updateCountDisplay(): void {
-    let countDisplay = document.querySelector(".c1");
+
+    // このciのクラスの値は、ifで生成された後指定できる
+    let countDisplay = document.querySelector(".c1");    
 
     if (countDisplay === null) {
       countDisplay = document.createElement("p");
