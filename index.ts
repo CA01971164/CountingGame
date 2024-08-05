@@ -21,18 +21,18 @@ class Game {
     this.targetNumber = this.generateNumber();
   }
 
-  public evaluateGuess(val: number): string {
-    if (this.targetNumber === val) {
+  public evaluateGuess(answer: number): string {
+    if (this.targetNumber === answer) {
       return "おめでとう！正解です！";
-    } else if (this.targetNumber - 1 <= val && val <= this.targetNumber + 1) {
+    } else if (this.targetNumber - 1 <= answer && answer <= this.targetNumber + 1) {
       return "!!惜しい!!ほぼ、正解！";
-    } else if (this.targetNumber - 5 <= val && val <= this.targetNumber + 5) {
+    } else if (this.targetNumber - 5 <= answer && answer <= this.targetNumber + 5) {
       return "かなり、近いよ!!";
-    } else if (val <= this.targetNumber - 50 || this.targetNumber + 50 <= val) {
+    } else if (answer <= this.targetNumber - 50 || this.targetNumber + 50 <= answer) {
       return "とんでもなく離れてる!";
-    } else if (val < this.targetNumber) {
+    } else if (answer < this.targetNumber) {
       return "もっと大きい数だよ！";
-    } else if (this.targetNumber < val) {
+    } else if (this.targetNumber < answer) {
       return "もっと小さい数だよ！";
     } else {
       return "1から100の間で入力してね";
@@ -42,19 +42,19 @@ class Game {
 
 class UI {
   private game: Game;
-  private bun: HTMLElement | null;
-  private msg: HTMLElement | null;
-  private text: HTMLInputElement | null;
+  private reactionBox: HTMLElement | null;
+  private verbalReaction: HTMLElement | null;
+  private answerClass: HTMLInputElement | null;
   private button: HTMLElement | null;
-  private ans: HTMLElement | null;
+  private resetBox: HTMLElement | null;
 
   constructor(game: Game) {
     this.game = game;
-    this.bun = document.querySelector(".bun");
-    this.msg = document.querySelector(".msg");
-    this.text = document.querySelector(".text") as HTMLInputElement;
+    this.reactionBox = document.querySelector(".reactionBox");
+    this.verbalReaction = document.querySelector(".verbalReaction");
+    this.answerClass = document.querySelector(".answerClass") as HTMLInputElement;
     this.button = document.querySelector(".button");
-    this.ans = document.querySelector(".ans");
+    this.resetBox = document.querySelector(".resetBox");
 
     this.addEventListeners();
   }
@@ -66,10 +66,10 @@ class UI {
   private handleButtonClick(): void {
     this.game.incrementCount();
     this.updateCountDisplay();
-    const val = Number(this.text?.value);
+    const answer = Number(this.answerClass?.value);
 
     if (this.game.count <= 10) {
-      const resultMessage = this.game.evaluateGuess(val);
+      const resultMessage = this.game.evaluateGuess(answer);
       this.showResultMessage(resultMessage);
     }
 
@@ -79,30 +79,29 @@ class UI {
   }
 
   private updateCountDisplay(): void {
-
     // このciのクラスの値は、ifで生成された後指定できる
-    let countDisplay = document.querySelector(".c1");    
+    let countDisplay = document.querySelector(".DisplayingTheCount");
 
     if (countDisplay === null) {
       countDisplay = document.createElement("p");
-      countDisplay.classList.add("c1");
-      this.bun?.appendChild(countDisplay);
+      countDisplay.classList.add("DisplayingTheCount");
+      this.reactionBox?.appendChild(countDisplay);
     }
 
     countDisplay.innerHTML = `挑戦回数: ${this.game.count}`;
   }
 
   private showResultMessage(message: string): void {
-    if (this.msg !== null) {
-      this.msg.innerHTML = message;
+    if (this.verbalReaction !== null) {
+      this.verbalReaction.innerHTML = message;
     }
   }
 
   private showResetButton(): void {
     const resetButton = document.createElement("button");
     resetButton.innerHTML = "リセット";
-    resetButton.classList.add("reset");
-    this.ans?.appendChild(resetButton);
+    resetButton.classList.add("resetButton");
+    this.resetBox?.appendChild(resetButton);
 
     resetButton.addEventListener("click", () => {
       this.game.resetGame();
@@ -113,16 +112,16 @@ class UI {
   }
 
   private clearMessages(): void {
-    if (this.msg !== null) {
-      this.msg.innerHTML = " ";
+    if (this.verbalReaction !== null) {
+      this.verbalReaction.innerHTML = " ";
     }
   }
 
   private removeElements(): void {
-    const countDisplay = document.querySelector(".c1");
+    const countDisplay = document.querySelector(".DisplayingTheCount");
     countDisplay?.remove();
 
-    const resetButton = document.querySelector(".reset");
+    const resetButton = document.querySelector(".resetButton");
     resetButton?.remove();
 
     const trueMessage = document.querySelector(".tru");
