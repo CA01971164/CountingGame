@@ -79,7 +79,7 @@ class UI {
   }
 
   private updateCountDisplay(): void {
-    // このciのクラスの値は、ifで生成された後指定できる
+    // DisplayingTheCountは、ifで生成された後指定できる
     let countDisplay = document.querySelector(".DisplayingTheCount");
 
     if (countDisplay === null) {
