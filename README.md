@@ -8,10 +8,6 @@
 
 自分たちの学科で習っている技術で、ゲームを含めたウェブアプリを作ることができることを知ってくて作りました。加えて、自分がこのゲームをして楽しかったのは言うまでもない。
 
-## ♠ 使用している技術
-
-<img src="https://img.shields.io/badge/-Html5-E34F26.svg?logo=html5&style=plastic"> 
-<img src="https://img.shields.io/badge/-Css3-1572B6.svg?logo=css3&style=plastic">
 
 ## ♠ ページの説明
 
