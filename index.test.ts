@@ -1,4 +1,4 @@
-import { Game, UI } from "./index";
+import { Game } from "./index";
 
 describe("Gameクラス", () => {
   let game: Game;
