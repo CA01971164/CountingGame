@@ -1,5 +1,4 @@
-"use strict";
-class Game {
+export class Game {
     constructor() {
         this.count = 0;
         this.targetNumber = this.generateNumber();
@@ -19,27 +18,32 @@ class Game {
         if (this.targetNumber === answer) {
             return "おめでとう！正解です！";
         }
-        else if (this.targetNumber - 1 <= answer && answer <= this.targetNumber + 1) {
+        else if (this.targetNumber - 1 <= answer &&
+            answer <= this.targetNumber + 1) {
             return "!!惜しい!!ほぼ、正解！";
         }
-        else if (this.targetNumber - 5 <= answer && answer <= this.targetNumber + 5) {
+        else if (this.targetNumber - 5 <= answer &&
+            answer <= this.targetNumber + 5) {
             return "かなり、近いよ!!";
         }
-        else if (answer <= this.targetNumber - 50 || this.targetNumber + 50 <= answer) {
-            return "とんでもなく離れてる!";
-        }
-        else if (answer < this.targetNumber) {
-            return "もっと大きい数だよ！";
-        }
-        else if (this.targetNumber < answer) {
-            return "もっと小さい数だよ！";
+        else if (1 <= answer && answer <= 100) {
+            if (answer <= this.targetNumber - 50 ||
+                this.targetNumber + 50 <= answer) {
+                return "とんでもなく離れてる!";
+            }
+            else if (answer < this.targetNumber) {
+                return "もっと大きい数だよ！";
+            }
+            else {
+                return "もっと小さい数だよ！";
+            }
         }
         else {
             return "1から100の間で入力してね";
         }
     }
 }
-class UI {
+export class UI {
     constructor(game) {
         this.game = game;
         this.reactionBox = document.querySelector(".reactionBox");
@@ -68,7 +72,7 @@ class UI {
     }
     updateCountDisplay() {
         var _a;
-        // このciのクラスの値は、ifで生成された後指定できる
+        // DisplayingTheCountは、ifで生成された後指定できる
         let countDisplay = document.querySelector(".DisplayingTheCount");
         if (countDisplay === null) {
             countDisplay = document.createElement("p");
